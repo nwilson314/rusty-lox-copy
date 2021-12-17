@@ -39,6 +39,22 @@ impl Scanner {
 
     fn scan_token(&mut self) {
         let c: char = self.advance();
+
+        match c {
+            '(' => self.add_token(TokenType::LeftParen),
+            ')' => self.add_token(TokenType::RightParen),
+            '{' => self.add_token(TokenType::LeftBrace),
+            '}' => self.add_token(TokenType::RightBrace),
+            ',' => self.add_token(TokenType::Comma),
+            '.' => self.add_token(TokenType::Dot),
+            '-' => self.add_token(TokenType::Minus),
+            '+' => self.add_token(TokenType::Plus),
+            ';' => self.add_token(TokenType::SemiColon),
+            '*' => self.add_token(TokenType::Star),
+            _ch => {
+
+            }
+        }
     }
 
     fn is_at_end(&self) -> bool {
@@ -47,10 +63,23 @@ impl Scanner {
 
     fn advance(&mut self) -> char {
         let temp_char =  self.source.chars().nth(self.current as usize).unwrap();
-
         self.current += 1;
-
         temp_char
+    }
+
+    fn add_token(&mut self, token_type: TokenType) {
+        self.add_token_literal(token_type, Literal::None);
+    }
+
+    fn add_token_literal(&mut self, token_type: TokenType, literal: Literal) {
+        let text = &self.source[self.start as usize .. self.current as usize];
+
+        self.tokens.push(Token {
+            token_type: token_type,
+            lexeme: text.to_string(),
+            literal: literal,
+            line: self.line
+        })
     }
 
 }
