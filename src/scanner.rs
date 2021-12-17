@@ -37,8 +37,20 @@ impl Scanner {
         self.tokens
     }
 
+    fn scan_token(&self) {
+        let c: char = self.advance();
+    }
+
     fn is_at_end(&self) -> bool {
         return self.current >= self.source.len() as u32;
+    }
+
+    fn advance(&mut self) -> char {
+        let temp_char =  self.source.chars().nth(self.current as usize).unwrap();
+
+        self.current += 1;
+
+        temp_char
     }
 
 }
