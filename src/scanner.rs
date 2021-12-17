@@ -1,5 +1,6 @@
 use crate::token_type::TokenType;
 use crate::token::{Token, Literal};
+use crate::lox::LoxError;
 
 pub struct Scanner {
     source: String,
@@ -20,11 +21,11 @@ impl Scanner {
         }
     }
 
-    pub fn scan_tokens(&mut self) -> Vec<Token> {
+    pub fn scan_tokens(&mut self) -> Result<Vec<Token>, LoxError>  {
         while !self.is_at_end() {
             // We are at the beginning of the next lexeme.
             self.start = self.current;
-            self.scan_token();
+            self.scan_token()?;
         }
 
         self.tokens.push(Token{
@@ -34,10 +35,10 @@ impl Scanner {
             line: self.line
         });
 
-        self.tokens.to_vec()
+        Ok(self.tokens.to_vec())
     }
 
-    fn scan_token(&mut self) {
+    fn scan_token(&mut self) -> Result<(), LoxError>{
         let c: char = self.advance();
 
         match c {
@@ -52,9 +53,10 @@ impl Scanner {
             ';' => self.add_token(TokenType::SemiColon),
             '*' => self.add_token(TokenType::Star),
             _ch => {
-
+                return Err(LoxError{line: self.line, message: "Unexpected character.".to_string()})
             }
         }
+        Ok(())
     }
 
     fn is_at_end(&self) -> bool {

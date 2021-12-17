@@ -1,6 +1,6 @@
 use crate::token_type::TokenType;
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Token {
     pub token_type: TokenType,
     pub lexeme: String,
@@ -12,7 +12,7 @@ impl Token {
 
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub enum Literal {
     String(String),
     Number(f64),

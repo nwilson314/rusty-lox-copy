@@ -43,15 +43,22 @@ impl Lox {
         }
     }
 
-    fn run(&self, source: &String) {
+    fn run(&mut self, source: &String) {
         let mut scanner: Scanner = Scanner::new(source);
-        let tokens: Vec<Token> = scanner.scan_tokens();
+        // let res_tokens: Result<Vec<Token>, LoxError> = scanner.scan_tokens();
+        let tokens: Vec<Token>;
+        match scanner.scan_tokens() {
+            Ok(ts) => tokens = ts,
+            Err(err) => {
+                tokens = Vec::new();
+                self.error(err.line, &err.message)
+            }
+        }
+
+        for token in tokens {
+            println!("{:?}", token);
+        }
     
-        // for token in tokens {
-        //     println!("{}", token);
-        // }
-    
-        println!("{}", source);
     }
 
     pub fn error(&mut self, line: u32, message: &String) {
@@ -62,4 +69,9 @@ impl Lox {
         eprintln!("[line {}] Error {}: {}", line, loc, message);
         self.had_error = true;
     }
+}
+
+pub struct LoxError {
+    pub line: u32,
+    pub message: String
 }
