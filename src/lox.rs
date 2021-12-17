@@ -2,6 +2,9 @@ use std::fs;
 use std::io::Write;
 use std::process;
 
+use crate::scanner::Scanner;
+use crate::token::Token;
+
 pub struct Lox {
     had_error: bool
 }
@@ -41,8 +44,8 @@ impl Lox {
     }
 
     fn run(&self, source: &String) {
-        // scanner: Scanner = Scanner::new(source);
-        // tokens: Vec<Token> = scanner.scan_tokens();
+        let scanner: Scanner = Scanner::new(source);
+        let tokens: Vec<Token> = scanner.scan_tokens();
     
         // for token in tokens {
         //     println!("{}", token);
