@@ -1,3 +1,4 @@
+#[derive(Clone)]
 pub enum TokenType {
     // One character tokens
     LeftParen, RightParen, LeftBrace, RightBrace,

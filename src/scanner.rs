@@ -34,10 +34,10 @@ impl Scanner {
             line: self.line
         });
 
-        self.tokens
+        self.tokens.to_vec()
     }
 
-    fn scan_token(&self) {
+    fn scan_token(&mut self) {
         let c: char = self.advance();
     }
 
