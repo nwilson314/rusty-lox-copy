@@ -52,11 +52,51 @@ impl Scanner {
             '+' => self.add_token(TokenType::Plus),
             ';' => self.add_token(TokenType::SemiColon),
             '*' => self.add_token(TokenType::Star),
+            '!' => {
+                let next_char = self.match_next('=');
+                self.add_token(if next_char {
+                    TokenType::BangEqual
+                } else {
+                    TokenType::Bang
+                });
+            },
+            '=' => {
+                let next_char = self.match_next('=');
+                self.add_token(if next_char {
+                    TokenType::EqualEqual
+                } else {
+                    TokenType::Equal
+                });
+            },
+            '<' => {
+                let next_char = self.match_next('=');
+                self.add_token(if next_char {
+                    TokenType::LessEqual
+                } else {
+                    TokenType::Less
+                });
+            },
+            '>' => {
+                let next_char = self.match_next('=');
+                self.add_token(if next_char {
+                    TokenType::GreaterEqual
+                } else {
+                    TokenType::Greater
+                });
+            },
             _ch => {
                 return Err(LoxError{line: self.line, message: "Unexpected character.".to_string()})
             }
         }
         Ok(())
+    }
+
+    fn match_next(&mut self, expected: char) -> bool {
+        if self.is_at_end() { return false; }
+        if self.source.chars().nth(self.current as usize).unwrap() != expected { return false; }
+
+        self.current += 1;
+        true
     }
 
     fn is_at_end(&self) -> bool {

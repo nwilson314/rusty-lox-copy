@@ -37,7 +37,7 @@ impl Lox {
                 Ok(_) => (),
                 Err(error) => eprintln!("{}", error)
             }
-            self.run(&line);
+            self.run(&line.trim_end().to_string());
             self.had_error = false;
             line.clear();
         }
